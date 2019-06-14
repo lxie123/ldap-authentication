@@ -11,7 +11,7 @@ Kubernetes Authentication with LDAP - Soup to Nuts
 * run all dex yaml
 * modify dex configmap
 * Reapply dex configmap
-* Apply the API flags and load the cert see api-change.txt
+* Apply the API flags and load the cert see api-server-setup.txt
 
 
 * Create user using phpadmin http://<Kubeadmin worker node ip>:31000
