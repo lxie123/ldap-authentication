@@ -1,0 +1,50 @@
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dex
+  namespace: kube-authentication
+data:
+  config.yaml: |
+    issuer: https://18.217.73.69:30010
+    storage:
+      type: kubernetes
+      config:
+        inCluster: true
+    web:
+      https: 0.0.0.0:5556
+      tlsCert: /etc/dex/tls/tls.crt
+      tlsKey: /etc/dex/tls/tls.key
+    staticClients:
+    - id: dex 
+      redirectURIs:
+      - 'http://18.217.73.69:32000/callback'
+      name: 'gangway'
+      secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+    connectors:
+    - type: ldap
+      name: OpenLDAP
+      id: ldap
+      config:
+        host: 10.100.230.194
+        # No TLS for this setup.
+        insecureNoSSL: true
+        # This would normally be a read-only user.
+        bindDN: cn=admin,dc=example,dc=org
+        bindPW: admin
+        usernamePrompt: User Name 
+        userSearch:
+          baseDN: dc=example,dc=org
+          filter: "(objectClass=posixaccount)"
+          username: uid
+          # "DN" (case sensitive) is a special attribute name. It indicates that
+          # this value should be taken from the entity's DN not an attribute on
+          # the entity.
+          idAttr: DN
+          emailAttr: mail
+          nameAttr: cn 
+          # The group name should be the "cn" value.
+          nameAttr: cn
+      oauth2:
+        skipApprovalScreen: true
+      enablePasswordDB: true

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gangway
+  namespace: kube-authentication
+data:
+  gangway.yaml: |
+    clusterName: "GANGWAY"
+    apiServerURL: "https://18.217.73.69:6443"
+    authorizeURL: "https://18.217.73.69:30010/auth"
+    tokenURL: "https://18.217.73.69:30010/token"
+    clientID: "dex"
+    clientSecret: "ZXhhbXBsZS1hcHAtc2VjcmV0"
+    redirectURL: "http://18.217.73.69:32000/callback"
+    scopes: ["openid", "profile", "groups", "email", "offline_access"]
+    usernameClaim: "email"
+    emailClaim: "email"

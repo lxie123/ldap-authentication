@@ -1,0 +1,68 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: gangway
+  name: gangway
+  namespace: kube-authentication
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gangway
+  template:
+    metadata:
+      labels:
+        app: gangway
+    spec:
+      initContainers:
+        - name: gangway-certs
+          image: alpine:latest
+          imagePullPolicy: Always
+          command:
+          - sh
+          - -c
+          - apk add --update ca-certificates openssl && cp /var/tmp/* /usr/local/share/ca-certificates && update-ca-certificates && cp /etc/ssl/certs/* /tmp/
+          volumeMounts:
+          - mountPath: /var/tmp
+            name: custom-certs
+          - mountPath: /tmp/
+            name: ssl-certs
+      containers:
+      - command:
+        - gangway
+        - -config
+        - /gangway/gangway.yaml
+        env:
+        - name: GANGWAY_SESSION_SECURITY_KEY
+          valueFrom:
+            secretKeyRef:
+              key: sesssionkey
+              name: gangway-key
+        image: gcr.io/heptio-images/gangway:v3.1.0
+        imagePullPolicy: Always
+        name: gangway
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /gangway/
+          name: gangway
+        - mountPath: /etc/ssl/certs
+          name: ssl-certs
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: gangway
+        name: gangway
+      - name: custom-certs
+        secret:
+          secretName: dex.example.com.tls
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
+      - name: ssl-certs
+        emptyDir: {}

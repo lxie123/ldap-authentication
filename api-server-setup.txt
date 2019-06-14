@@ -1,0 +1,9 @@
+• Take the cert that server.crt created and place it in /etc/kubernetes/pki/server.crt
+
+• Add the following flags to /etc/kubernetes/manifests/kube-apiserver.yaml:
+    - --oidc-issuer-url=https://<Dex endpoint>   
+    - --oidc-client-id=dex
+    
+    - --oidc-username-claim=email
+    
+    - --oidc-ca-file=/etc/kubernetes/pki/server.crt
