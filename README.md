@@ -12,7 +12,7 @@ Kubernetes Authentication with LDAP - Soup to Nuts
 * run all phpldapadmin yaml
 * run all gangway yaml
 * modify gangway configmap
-  *  ``` clusterName: "GANGWAY"  <-- any name you want?
+  * ``` clusterName: "GANGWAY"  <-- any name you want?
     apiServerURL: "https://18.217.73.69:6443"  <-- K8s api endpoint
     authorizeURL: "https://18.217.73.69:30010/auth" <--  Dex external endpoint (nodeport)
     tokenURL: "https://18.217.73.69:30010/token"  <--  Dex external endpoint
