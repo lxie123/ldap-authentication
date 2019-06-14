@@ -15,4 +15,5 @@ Kubernetes Authentication with LDAP - Soup to Nuts
 
 
 * Create user using phpadmin http://<Kubeadmin worker node ip>:31000
+  * login:cn=admin,dc=example,dc=org / pass:admin
 * Login to gangway http://<Kubeadmin worker node ip>:32000
